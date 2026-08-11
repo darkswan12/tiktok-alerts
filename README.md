@@ -7,7 +7,7 @@ Sistem notifikasi real-time untuk TikTok Live, dirancang khusus untuk diintegras
 - **Real-time Events:** Menangkap notifikasi Gift, Like, Follow, Member (Join), dan Chat secara instan tanpa delay.
 - **Custom Audio Alerts:** Putar efek suara berbeda berdasarkan nama Gift (misalnya: suara khusus untuk Rose/Mawar, dan suara default untuk gift lainnya).
 - **OBS Ready:** Desain overlay transparan dengan animasi slide-in yang mulus, siap dipasang di OBS via Browser Source.
-- **Cloud Database (PostgreSQL):** Terintegrasi dengan PostgreSQL (Supabase) untuk menyimpan riwayat gift secara permanen, aman dari siklus restart server di cloud.
+- **Cloud Database (PostgreSQL):** Terintegrasi dengan PostgreSQL bawaan Railway untuk menyimpan riwayat gift secara permanen, aman dari siklus restart server.
 - **Web Control Panel:** Dashboard responsif untuk menghubungkan username TikTok ke sistem secara dinamis dan melakukan uji coba (test gift).
 
 ---
@@ -17,7 +17,7 @@ Sistem notifikasi real-time untuk TikTok Live, dirancang khusus untuk diintegras
 - **Backend:** Node.js, Express.js
 - **WebSocket:** Socket.io
 - **TikTok API:** @tiktool/live
-- **Database:** PostgreSQL (pg)
+- **Database:** PostgreSQL (pg) via Railway
 
 ---
 
@@ -35,7 +35,7 @@ Pastikan kamu sudah menginstal Node.js di komputermu.
 3. **Konfigurasi Environment Variables**
    Buat file bernama .env di folder utama proyek, lalu isi dengan kunci berikut:
    TIKTOOL_API_KEY=api_key_kamu_di_sini
-   DATABASE_URL=postgresql://postgres:[PASSWORD]@[HOST]:5432/postgres
+   DATABASE_URL=postgresql://postgres:[PASSWORD]@[HOST]:5432/railway
    PORT=3000
 
 4. **Siapkan Folder Suara (Assets)**
@@ -49,15 +49,16 @@ Pastikan kamu sudah menginstal Node.js di komputermu.
 
 ## ☁️ Deployment ke Railway (Cloud)
 
-Proyek ini sudah dikonfigurasi untuk berjalan mulus di platform cloud seperti Railway.
+Proyek ini sudah dikonfigurasi untuk berjalan 100% di dalam ekosistem Railway tanpa layanan pihak ketiga.
 
 1. Buat akun dan login ke Railway.app.
 2. Klik **New Project** -> **Deploy from GitHub repo**.
 3. Pilih repositori tiktok-alerts.
-4. Masuk ke menu **Variables** di dashboard Railway, tambahkan:
-   - TIKTOOL_API_KEY : API Key kamu.
-   - DATABASE_URL : URL koneksi PostgreSQL (Supabase).
-5. Masuk ke tab **Settings** -> **Networking**, lalu klik **Generate Domain** untuk mendapatkan URL publik kamu.
+4. Tambahkan Database: Di dashboard project Railway kamu, klik **New** -> **Database** -> **Add PostgreSQL**.
+5. Masuk ke menu **Variables** di bagian aplikasi web kamu (bukan di bagian database), tambahkan:
+   - TIKTOOL_API_KEY : Isi dengan API Key kamu.
+   - DATABASE_URL : Ketik `${{` lalu pilih `PostgreSQL` -> `DATABASE_URL` (ini akan otomatis menyambungkan database bawaan Railway ke aplikasi kamu).
+6. Masuk ke tab **Settings** -> **Networking**, lalu klik **Generate Domain** untuk mendapatkan URL publik kamu.
 
 ---
 
