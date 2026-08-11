@@ -122,6 +122,14 @@ io.on('connection', (socket) => {
     socket.on('test_gift', () => {
         io.emit('gift_event', { username: 'TestUser', giftName: 'Rose', count: 1 });
     });
+
+    socket.on('test_follow', () => {
+        io.emit('event', `👤 Seseorang mulai mengikuti!`);
+    });
+
+    socket.on('test_member', () => {
+        io.emit('event', `👋 Jamal bergabung ke LIVE!`);
+    });
     
     socket.on('connect_tiktok', (username) => {
         startTikTokConnection(username, socket);
