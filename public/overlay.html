@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>TikTok OBS Overlay</title>
+
+```
+<script src="/socket.io/socket.io.js"></script>
+
+<style>
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        overflow: hidden;
+
+        color: white;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+        text-shadow: 2px 2px 4px #000;
+    }
+
+    #events {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+    }
+
+    .event-box {
+        background: rgba(0, 0, 0, 0.7);
+
+        padding: 15px 20px;
+        margin-bottom: 10px;
+
+        border-radius: 12px;
+
+        width: fit-content;
+
+        font-size: 20px;
+        font-weight: bold;
+
+        border-left: 5px solid #00f2fe;
+
+        animation: slideIn 0.5s ease-out;
+
+        transition: opacity 0.5s ease;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+</style>
+```
+
+</head>
+
+<body>
+
+```
+<div id="events"></div>
+
+<script>
+    const socket = io();
+
+    const eventContainer =
+        document.getElementById('events');
+
+    function showNotification(msg) {
+        const el = document.createElement('div');
+
+        el.className = 'event-box';
+        el.innerText = msg;
+
+        eventContainer.prepend(el);
+
+        setTimeout(() => {
+            el.style.opacity = '0';
+
+            setTimeout(() => {
+                el.remove();
+            }, 500);
+
+        }, 5000);
+    }
+
+    // LIKE & FOLLOW
+    socket.on('event', msg => {
+        showNotification(msg);
+    });
+
+    // GIFT
+    socket.on('gift_event', data => {
+
+        showNotification(
+            `🎁 ${data.username} mengirim ${data.giftName} x${data.count}`
+        );
+
+        let audioFile = '/sounds/default.mp3';
+
+        const giftName =
+            String(data.giftName).toLowerCase();
+
+        if (
+            giftName === 'rose' ||
+            giftName === 'mawar'
+        ) {
+            audioFile = '/sounds/rose.mp3';
+        }
+
+        const audio = new Audio(audioFile);
+
+        audio.volume = 1.0;
+
+        audio.play()
+            .catch(err => {
+                console.error(
+                    'Audio error:',
+                    err
+                );
+            });
+    });
+</script>
+```
+
+</body>
+</html>
