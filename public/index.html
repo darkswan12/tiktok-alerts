@@ -1,115 +1,99 @@
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Dashboard TikTok Alerts</title>
     <script src="/socket.io/socket.io.js"></script>
-
-```
-<style>
-    body {
-        font-family: sans-serif;
-        padding: 40px;
-        background: #121212;
-        color: #fff;
-    }
-
-    .card {
-        background: #1e1e1e;
-        padding: 20px;
-        border-radius: 10px;
-        max-width: 400px;
-    }
-
-    input {
-        padding: 10px;
-        width: 80%;
-        margin-bottom: 15px;
-        border-radius: 5px;
-        border: none;
-    }
-
-    button {
-        padding: 10px 20px;
-        background: #fe2c55;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    button:hover {
-        background: #e0264d;
-    }
-
-    #status {
-        color: #00f2fe;
-        margin-top: 20px;
-    }
-</style>
-```
-
-</head>
-
-<body>
-
-```
-<div class="card">
-    <h2>Control Panel Lokal</h2>
-
-    <input
-        type="text"
-        id="username"
-        placeholder="Username TikTok tanpa @"
-    >
-
-    <br>
-
-    <button onclick="connectTikTok()">
-        Connect to LIVE
-    </button>
-
-    <button onclick="testGift()">
-        🧪 TEST GIFT
-    </button>
-
-    <h3 id="status">
-        Status: Disconnected
-    </h3>
-</div>
-
-<script>
-    const socket = io();
-
-    function connectTikTok() {
-        const user = document
-            .getElementById('username')
-            .value
-            .trim();
-
-        if (!user) {
-            alert('Masukkan username TikTok dulu!');
-            return;
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 40px;
+            background: #121212;
+            color: #fff;
         }
 
-        document.getElementById('status').innerText =
-            'Status: Menghubungkan...';
+        .card {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+        }
 
-        socket.emit('connect_tiktok', user);
-    }
+        input {
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: none;
+        }
 
-    function testGift() {
-        socket.emit('test_gift');
-    }
-    
-    socket.on('status', msg => {
-        document.getElementById('status').innerText =
-            'Status: ' + msg;
-    });
-</script>
-```
+        button {
+            padding: 10px 20px;
+            margin-bottom: 10px; /* Tambahan spasi biar rapi */
+            background: #fe2c55;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%; /* Biar tombolnya sejajar penuh */
+        }
 
+        button:hover {
+            background: #e0264d;
+        }
+
+        #status {
+            color: #00f2fe;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Control Panel Lokal</h2>
+        <input type="text" id="username" placeholder="Username TikTok tanpa @">
+        <br>
+        
+        <button onclick="connectTikTok()">Connect to LIVE</button>
+        <button onclick="testGift()">🧪 TEST GIFT</button>
+        <button onclick="testFollow()">👤 TEST FOLLOW</button>
+        <button onclick="testMember()">👋 TEST JOIN (Masuk)</button>
+
+        <h3 id="status">Status: Disconnected</h3>
+    </div>
+
+    <script>
+        const socket = io();
+
+        function connectTikTok() {
+            const user = document.getElementById('username').value.trim();
+            if (!user) {
+                alert('Masukkan username TikTok dulu!');
+                return;
+            }
+            document.getElementById('status').innerText = 'Status: Menghubungkan...';
+            socket.emit('connect_tiktok', user);
+        }
+
+        function testGift() {
+            socket.emit('test_gift');
+        }
+        
+        // Fungsi baru buat test Follow
+        function testFollow() {
+            socket.emit('test_follow');
+        }
+
+        // Fungsi baru buat test Join/Masuk
+        function testMember() {
+            socket.emit('test_member');
+        }
+        
+        socket.on('status', msg => {
+            document.getElementById('status').innerText = 'Status: ' + msg;
+        });
+    </script>
 </body>
 </html>
